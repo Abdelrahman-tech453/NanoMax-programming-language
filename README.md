@@ -1,4 +1,4 @@
-# Flint
+# Qaf
 
 A small programming language, implemented entirely in hand-written x86-64
 assembly. The lexer, parser, AST, and evaluator are all assembly — there is
@@ -14,21 +14,22 @@ Using `make`:
 ```bash
 make
 make test
-./flint fib.fl
+./qaf program.qf
 ```
 
 Or manually:
 ```bash
 as --64 flint.s -o flint.o
 ld -o flint flint.o
-./flint fib.fl
+cp flint qaf
+./qaf program.qf
 ```
 
 No NASM, no cross-compiler, no dependencies beyond binutils.
 
 ## The language
 
-Flint is a small imperative language: user-defined functions with recursion, integer variables,
+Qaf is a small imperative language: user-defined functions with recursion, integer variables,
 arithmetic with real operator precedence, logical operators with short-circuiting, comparisons,
 `if`/`else`, `while`, `break`, `continue`, `return`, booleans, and `print`.
 It's Turing-complete and enough to write real (if simple) programs.
@@ -72,7 +73,7 @@ block      := "{" stmt* "}"
 expr       := logical_or
 logical_or := logical_and ("||" logical_and)*
 logical_and:= equality ("&&" equality)*
-equality   := relational (("==" | "!=") relational)*
+equality   := relational (("==" | "!=" ) relational)*
 relational := additive (("<" | ">" | "<=" | ">=") additive)*
 additive   := mult (("+" | "-") mult)*
 mult       := unary (("*" | "/" | "%") unary)*
@@ -90,7 +91,7 @@ primary    := NUMBER | "true" | "false" | IDENT "(" [expr ("," expr)*] ")" | IDE
   through a symbol table — see Architecture below.
 - `#` starts a comment that runs to end of line.
 - Division and modulo by zero are caught and reported.
-- Syntax errors report the offending source line number (`flint: parse error on line <N>`).
+- Syntax errors report the offending source line number (`qaf: parse error on line <N>`).
 - Blocks are mandatory for control flow: `if (x) { ... }`, `while (x) { ... }`.
 
 ## Architecture
@@ -124,13 +125,15 @@ tree walk over the AST. Statements return execution status codes
 ```
 flint.s              the whole interpreter (one self-contained file)
 Makefile             build and test automation
-fib.fl               first 10 Fibonacci numbers
-fact.fl              5!
-primes.fl            primes up to 50 (nested while + if)
-collatz.fl           Collatz step count from 27 (if/else inside while)
-test_logical.fl      boolean literals, logical operators, short-circuit test
-test_loop_control.fl break and continue in single and nested loops
-test_functions.fl    recursive factorial, recursive fibonacci, gcd, multi-arg functions
+fib.qf               first 10 Fibonacci numbers
+fact.qf              5!
+primes.qf            primes up to 50 (nested while + if)
+collatz.qf           Collatz step count from 27 (if/else inside while)
+test_arithmetic.qf   arithmetic operator tests
+test_char_io.qf      putchar tests
+test_functions.qf    recursive factorial, recursive fibonacci, gcd, multi-arg functions
+test_input.qf        read() input test
+test_while.qf        while loop tests
 ```
 
 ## Limitations / where to take it next

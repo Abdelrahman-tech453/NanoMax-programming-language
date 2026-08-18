@@ -1,0 +1,28 @@
+#!/bin/sh
+# qaf wrapper — launch the existing flint binary as "qaf" and accept .qf files.
+# This allows a non-invasive rebrand without modifying the assembly source.
+
+if [ "$#" -lt 1 ]; then
+  echo "usage: qaf <program.qf>"
+  exit 1
+fi
+
+# If the provided file exists, run it. If not, try swapping .qf -> .fl
+arg="$1"
+if [ -f "$arg" ]; then
+  exec ./flint "$@"
+else
+  case "$arg" in
+    *.qf)
+      alt="${arg%.qf}.fl"
+      if [ -f "$alt" ]; then
+        exec ./flint "$alt" "${@:2}"
+      else
+        exec ./flint "$arg" "${@:2}"
+      fi
+      ;;
+    *)
+      exec ./flint "$@"
+      ;;
+  esac
+fi

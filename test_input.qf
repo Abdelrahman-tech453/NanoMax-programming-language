@@ -1,0 +1,14 @@
+
+
+# Test Standard Input (read)
+
+fn add(a, b) {
+  return a + b;
+}
+
+a = read();
+b = read();
+
+
+print add(a, b);
+
