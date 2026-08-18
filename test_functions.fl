@@ -1,0 +1,59 @@
+# Test User-Defined Functions
+
+# 1. Basic function with return
+fn add(a, b) {
+  return a + b;
+}
+
+print add(17, 25); # Expected: 42
+
+# 2. GCD with loop and return
+fn gcd(a, b) {
+  while (b != 0) {
+    t = b;
+    b = a % b;
+    a = t;
+  }
+  return a;
+}
+
+print gcd(48, 18); # Expected: 6
+print gcd(101, 10); # Expected: 1
+
+# 3. Recursive factorial
+fn fact(n) {
+  if (n <= 1) {
+    return 1;
+  }
+  return n * fact(n - 1);
+}
+
+print fact(5);  # Expected: 120
+print fact(7);  # Expected: 5040
+
+# 4. Recursive Fibonacci
+fn fib(n) {
+  if (n <= 0) {
+    return 0;
+  }
+  if (n == 1) {
+    return 1;
+  }
+  return fib(n - 1) + fib(n - 2);
+}
+
+print fib(10); # Expected: 55
+
+# 5. Multi-argument polynomial: a*x^2 + b*x + c
+fn poly(x, a, b, c) {
+  return a * x * x + b * x + c;
+}
+
+print poly(3, 2, 5, 7); # 2*9 + 5*3 + 7 = 18 + 15 + 7 = 40. Expected: 40
+
+# 6. Function without explicit return (defaults to 0)
+fn no_return(x) {
+  temp = x + 10;
+}
+
+print no_return(5); # Expected: 0
